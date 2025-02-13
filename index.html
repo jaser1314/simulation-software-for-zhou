@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>死亡预测模型</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>死亡预测模型训练与预测</h1>
+        
+        <!-- 上传文件表单 -->
+        <form action="/train_model" method="POST" enctype="multipart/form-data">
+            <label for="file">上传训练数据CSV文件:</label>
+            <input type="file" name="file" accept=".csv" required>
+            <button type="submit">训练模型</button>
+        </form>
+        
+        {% if auc_score %}
+            <h2>训练完成！AUC值: {{ auc_score }}</h2>
+            <a href="{{ url_for('static', filename=roc_image) }}" target="_blank">查看ROC曲线</a>
+        {% endif %}
+
+        <h2>输入新患者数据进行死亡概率预测</h2>
+        <form action="/predict" method="POST">
+            <label for="anti_after">anti_after:</label>
+            <input type="text" name="anti_after" required>
+            <label for="creatinine_0">creatinine_0:</label>
+            <input type="text" name="creatinine_0" required>
+            <label for="plt_1">plt_1:</label>
+            <input type="text" name="plt_1" required>
+            <label for="creatinine_1">creatinine_1:</label>
+            <input type="text" name="creatinine_1" required>
+            <label for="charlson">charlson:</label>
+            <input type="text" name="charlson" required>
+            <label for="wbc_1">wbc_1:</label>
+            <input type="text" name="wbc_1" required>
+            <label for="imv_after">imv_after:</label>
+            <input type="text" name="imv_after" required>
+            <label for="hb_1">hb_1:</label>
+            <input type="text" name="hb_1" required>
+            <label for="pct_0">pct_0:</label>
+            <input type="text" name="pct_0" required>
+            <label for="bilirubin_total_1">bilirubin_total_1:</label>
+            <input type="text" name="bilirubin_total_1" required>
+            <button type="submit">预测死亡概率</button>
+        </form>
+
+        {% if death_probability %}
+            <h3>预测的死亡概率: {{ death_probability }}</h3>
+        {% endif %}
+        
+    </div>
+</body>
+</html>
